@@ -1,3 +1,6 @@
+import process from 'process';
+window.process = process;
+
 import { createApp } from 'vue';
 
 import Antd from 'ant-design-vue';

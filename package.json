@@ -7,11 +7,21 @@
   },
   "dependencies": {
     "ant-design-vue": "^3.2.12",
-    "vue": "^3.2.39"
+    "buffer": "^6.0.3",
+    "events": "^3.3.0",
+    "fflate": "^0.7.3",
+    "gerber-to-svg": "^4.2.8",
+    "pcb-stackup": "^4.2.8",
+    "pify": "^6.1.0",
+    "process": "^0.11.10",
+    "util": "^0.12.4",
+    "vue": "^3.2.39",
+    "whats-that-gerber": "^4.2.7"
   },
   "devDependencies": {
     "@nabla/vite-plugin-eslint": "^1.4.1",
     "@types/node": "^18.7.20",
+    "@types/pify": "^5.0.1",
     "@typescript-eslint/eslint-plugin": "^5.38.0",
     "@typescript-eslint/parser": "^5.38.0",
     "@vitejs/plugin-vue": "^3.1.0",

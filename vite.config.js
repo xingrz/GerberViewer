@@ -8,6 +8,10 @@ export default defineConfig({
       '@': resolve('./src'),
     },
   },
+  define: {
+    'global': {},
+    'process.env': {},
+  },
   plugins: [
     vue(),
     splitVendorChunkPlugin(),

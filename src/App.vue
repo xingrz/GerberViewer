@@ -17,27 +17,29 @@
         </a-col>
       </a-row>
     </template>
-    <a-tab-pane key="panel1" tab="Panel 1">
+    <a-tab-pane key="file" tab="文件">
       <x-panel>
-        Panel 1
-      </x-panel>
-    </a-tab-pane>
-    <a-tab-pane key="panel2" tab="Panel 2">
-      <x-panel>
-        Panel 2
+        <file-panel v-model:layers="layers" />
       </x-panel>
     </a-tab-pane>
   </x-panel-container>
-  <div :style="{width:'5000px', height:'2000px'}">
-    Hello world
+  <div :style="{ padding: '180px 20px 20px' }">
+    <gerber-view :layers="layers" side="top" />
   </div>
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
 import { ExportOutlined } from '@ant-design/icons-vue';
+import type { InputLayer } from 'pcb-stackup';
 
 import XPanelContainer from '@/components/XPanelContainer.vue';
 import XPanel from '@/components/XPanel.vue';
+import GerberView from '@/components/GerberView.vue';
+
+import FilePanel from '@/panels/FilePanel.vue';
+
+const layers = ref<InputLayer[]>([]);
 </script>
 
 <style lang="scss">
