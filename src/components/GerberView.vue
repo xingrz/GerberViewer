@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.container" :ref="(ref) => containerRef = (ref as HTMLElement)">
-    <canvas :ref="(ref) => canvasRef = (ref as HTMLCanvasElement)" />
+    <canvas :ref="(ref) => canvasRef = (ref as HTMLCanvasElement)" :class="{ [$style.dragging]: dragging }" />
   </div>
 </template>
 
@@ -48,6 +48,7 @@ const canvasRef = ref<HTMLCanvasElement>();
 
 const scale = ref(1);
 const scroll = reactive({ x: 0, y: 0 });
+const dragging = ref(false);
 
 function draw(): void {
   const container = containerRef.value;
@@ -98,6 +99,21 @@ watch(canvasRef, () => {
     }
     draw();
   });
+
+  canvas.addEventListener('mousedown', () => {
+    dragging.value = true;
+  });
+  canvas.addEventListener('mouseup', () => {
+    dragging.value = false;
+  });
+  canvas.addEventListener('mousemove', (evt) => {
+    if (dragging.value) {
+      evt.preventDefault();
+      scroll.x += evt.movementX;
+      scroll.y += evt.movementY;
+      draw();
+    }
+  });
 });
 </script>
 
@@ -108,5 +124,9 @@ watch(canvasRef, () => {
   right: 8px;
   bottom: 8px;
   overflow: hidden;
+}
+
+.dragging {
+  cursor: move;
 }
 </style>
