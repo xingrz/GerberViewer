@@ -91,7 +91,7 @@ watch(canvasRef, () => {
   canvas.addEventListener('wheel', (evt) => {
     evt.preventDefault();
     if (evt.ctrlKey) {
-      const value = scale.value - evt.deltaY / 50;
+      const value = scale.value - evt.deltaY / 100;
       scale.value = Math.max(0.5, value);
     } else {
       scroll.x -= evt.deltaX;
