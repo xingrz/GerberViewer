@@ -36,6 +36,7 @@ import { render } from 'gerber-to-svg';
 import PanelUnit from '@/components/XPanelUnit.vue';
 
 import { COLORS, FINISHES } from '@/utils/gerber';
+import { toPNG, toSVG } from '@/utils/svg';
 import { outputZip } from '@/utils/zip';
 
 const props = defineProps<{
@@ -59,21 +60,20 @@ async function output(): Promise<void> {
 
   const files: Record<string, Uint8Array> = {};
 
-  files['top.svg'] = renderSVG(stack.top.svg);
-  files['bottom.svg'] = renderSVG(stack.bottom.svg);
+  const ext = format.value;
+  const write = ext == 'png' ? toPNG : toSVG;
 
-  if (props.layers) {
+  files[`top.${ext}`] = await write(stack.top.svg);
+  files[`bottom.${ext}`] = await write(stack.bottom.svg);
+
+  if (layers.value) {
     for (const layer of stack.layers) {
-      files[`${layer.filename}.svg`] = renderSVG(render(layer.converter, {}));
+      files[`${layer.filename}.${ext}`] = await write(render(layer.converter, {}));
     }
   }
 
   await outputZip(files, 'pcb.zip');
 
   rendering.value = false;
-}
-
-function renderSVG(svg: string): Uint8Array {
-  return new TextEncoder().encode(svg);
 }
 </script>
