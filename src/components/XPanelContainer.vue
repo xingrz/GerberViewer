@@ -1,31 +1,34 @@
 <template>
-  <a-affix :ref="(ref) => navAffix = ref as AffixInstance">
-    <div class="x-panel-container">
-      <a-tabs type="card">
-        <template #rightExtra>
-          <slot name="extra" />
-        </template>
-        <slot />
-      </a-tabs>
-    </div>
-  </a-affix>
+  <div class="x-panel-container" :ref="(ref) => container = ref as Element">
+    <a-tabs type="card" @change="handleTabChange">
+      <template #rightExtra>
+        <slot name="extra" />
+      </template>
+      <slot />
+    </a-tabs>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-import type { AffixInstance } from 'ant-design-vue/lib/affix';
+import { defineEmits, nextTick, ref, watch } from 'vue';
 
-const navAffix = ref<AffixInstance>();
-window.addEventListener('resize', () => {
-  navAffix.value?.updatePosition();
-});
+const emit = defineEmits<{
+  (e: 'resize', height: number): void;
+}>();
+
+const container = ref<Element>();
+function handleTabChange(): void {
+  nextTick(() => {
+    if (container.value) {
+      emit('resize', container.value.clientHeight);
+    }
+  });
+}
+watch(container, handleTabChange);
 </script>
 
 <style lang="scss">
 .x-panel-container {
-  position: fixed;
-  left: 0;
-  right: 0;
   padding: 8px;
   background: #283237;
   transition: background 250ms;
@@ -70,10 +73,5 @@ window.addEventListener('resize', () => {
       margin-bottom: 0;
     }
   }
-}
-
-.ant-affix .x-panel-container {
-  box-shadow: rgba(0, 0, 0, 1.0) 0px 0px 4px;
-  background: #485257;
 }
 </style>

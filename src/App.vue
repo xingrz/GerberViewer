@@ -1,5 +1,5 @@
 <template>
-  <x-panel-container>
+  <x-panel-container @resize="handleResize">
     <template #extra>
       <a-row :gutter="[8]">
         <a-col>
@@ -23,9 +23,7 @@
       </x-panel>
     </a-tab-pane>
   </x-panel-container>
-  <div :style="{ padding: '180px 20px 20px' }">
-    <gerber-view :layers="layers" side="top" />
-  </div>
+  <gerber-view :layers="layers" side="top" :style="{ top: `${canvasTop}px` }" />
 </template>
 
 <script lang="ts" setup>
@@ -40,6 +38,11 @@ import GerberView from '@/components/GerberView.vue';
 import FilePanel from '@/panels/FilePanel.vue';
 
 const layers = ref<InputLayer[]>([]);
+
+const canvasTop = ref(0);
+function handleResize(height: number): void {
+  canvasTop.value = height;
+}
 </script>
 
 <style lang="scss">
