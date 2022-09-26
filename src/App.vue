@@ -20,6 +20,9 @@
         <layers-panel v-model:layers="layers" :render="render" />
       </x-panel>
     </a-tab-pane>
+    <a-tab-pane key="output" tab="输出">
+      <output-panel :layers="layers" :render="render" />
+    </a-tab-pane>
   </x-panel-container>
   <gerber-view :layers="layers" :render="render" :style="{ top: `${canvasTop}px` }" />
 </template>
@@ -36,6 +39,7 @@ import GerberView from '@/components/GerberView.vue';
 
 import LayersPanel from '@/panels/LayersPanel.vue';
 import RenderPanel from '@/panels/RenderPanel.vue';
+import OutputPanel from '@/panels/OutputPanel.vue';
 
 import { loadLayers } from '@/utils/gerber';
 
