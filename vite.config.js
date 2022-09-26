@@ -9,7 +9,7 @@ export default defineConfig({
     },
   },
   define: {
-    'global': {},
+    'global.Uint8Array': undefined,
     'process.env': {},
   },
   plugins: [
