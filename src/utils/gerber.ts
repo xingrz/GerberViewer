@@ -1,21 +1,29 @@
+import promisify from 'pify';
+import { unzip as _unzip } from 'fflate';
 import type { InputLayer } from 'pcb-stackup';
 import type { GerberProps, GerberSide, GerberType } from 'whats-that-gerber';
 import { Buffer } from 'buffer';
 
+const unzip = promisify(_unzip);
+
+export async function loadLayers(file: File): Promise<InputLayer[]> {
+  const buffer = await file.arrayBuffer();
+  const entries = await unzip(new Uint8Array(buffer));
+  return await readLayers(entries);
+}
+
 export async function readLayers(entries: Record<string, Uint8Array>): Promise<InputLayer[]> {
   const layers = <InputLayer[]>[];
   for (const name of Object.keys(entries)) {
-    const { type, side } = mapLayerType(name) || {};
-    if (type && side) {
-      layers.push({ type, side, gerber: Buffer.from(entries[name]), filename: name });
-    }
+    const { type, side } = mapLayerType(name);
+    layers.push({ type, side, gerber: Buffer.from(entries[name]), filename: name });
   }
   return layers;
 }
 
-function mapLayerType(name: string): GerberProps | undefined {
-  let type: GerberType | undefined;
-  let side: GerberSide | undefined;
+export function mapLayerType(name: string): GerberProps {
+  let type: GerberType = null;
+  let side: GerberSide = null;
 
   const segments = name.toLowerCase().split(/_|-|\./);
 
@@ -38,14 +46,16 @@ function mapLayerType(name: string): GerberProps | undefined {
   }
 
   if (segments.find(s => s.startsWith('in'))) {
-    side == 'inner';
+    side = 'inner';
   } else if (segments.includes('f') || segments.includes('top')) {
     side = 'top';
   } else if (segments.includes('b') || segments.includes('bottom')) {
     side = 'bottom';
   }
 
-  if (type && side) {
-    return { type, side };
+  if (side == 'inner' && !type) {
+    type = 'copper';
   }
+
+  return { type, side };
 }

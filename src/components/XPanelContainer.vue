@@ -25,6 +25,7 @@ function handleTabChange(): void {
   });
 }
 watch(container, handleTabChange);
+window.setInterval(handleTabChange, 1000);
 </script>
 
 <style lang="scss">
@@ -40,6 +41,8 @@ watch(container, handleTabChange);
       >.ant-tabs-tabpane {
         padding: 32px;
         background: #fff;
+        max-height: 50vh;
+        overflow-y: scroll;
       }
     }
 

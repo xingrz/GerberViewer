@@ -8,18 +8,15 @@
           </a-button>
         </a-col>
         <a-col>
-          <a-button type="primary">
-            <template #icon>
-              <ExportOutlined />
-            </template>
-            导出
-          </a-button>
+          <a-upload :customRequest="loadGerber" :showUploadList="false">
+            <a-button type="primary" :loading="loading">打开 Gerber 文件</a-button>
+          </a-upload>
         </a-col>
       </a-row>
     </template>
-    <a-tab-pane key="file" tab="文件">
+    <a-tab-pane key="layers" tab="图层">
       <x-panel>
-        <file-panel v-model:layers="layers" />
+        <layers-panel v-model:layers="layers" />
       </x-panel>
     </a-tab-pane>
   </x-panel-container>
@@ -28,14 +25,15 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { ExportOutlined } from '@ant-design/icons-vue';
 import type { InputLayer } from 'pcb-stackup';
 
 import XPanelContainer from '@/components/XPanelContainer.vue';
 import XPanel from '@/components/XPanel.vue';
 import GerberView from '@/components/GerberView.vue';
 
-import FilePanel from '@/panels/FilePanel.vue';
+import LayersPanel from '@/panels/LayersPanel.vue';
+
+import { loadLayers } from '@/utils/gerber';
 
 const layers = ref<InputLayer[]>([]);
 
@@ -43,18 +41,18 @@ const canvasTop = ref(0);
 function handleResize(height: number): void {
   canvasTop.value = height;
 }
+
+const loading = ref(false);
+async function loadGerber({ file }: { file: File }): Promise<void> {
+  loading.value = true;
+  layers.value = await loadLayers(file);
+  loading.value = false;
+}
 </script>
 
 <style lang="scss">
-body {
-  background: #283237;
-}
-
+body,
 .x-panel-container {
-  background: #283237;
-}
-
-.ant-affix .x-panel-container {
-  background: #485257;
+  background: #263238;
 }
 </style>

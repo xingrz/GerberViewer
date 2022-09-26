@@ -57,6 +57,7 @@ function draw(): void {
 
 window.addEventListener('resize', draw);
 watch(image, () => {
+  scale.value = 1;
   scroll.x = 0;
   scroll.y = 0;
   draw();

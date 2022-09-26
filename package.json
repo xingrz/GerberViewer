@@ -11,6 +11,7 @@
     "events": "^3.3.0",
     "fflate": "^0.7.3",
     "gerber-to-svg": "^4.2.8",
+    "lodash": "^4.17.21",
     "pcb-stackup": "^4.2.8",
     "pify": "^6.1.0",
     "process": "^0.11.10",
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "@nabla/vite-plugin-eslint": "^1.4.1",
+    "@types/lodash": "^4.14.185",
     "@types/node": "^18.7.20",
     "@types/pify": "^5.0.1",
     "@typescript-eslint/eslint-plugin": "^5.38.0",
