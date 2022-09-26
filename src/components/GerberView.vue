@@ -6,21 +6,41 @@
 
 <script lang="ts" setup>
 import type { InputLayer } from 'pcb-stackup';
+
 import stackup from 'pcb-stackup';
 import { defineProps, reactive, ref, watch } from 'vue';
 
 import { loadSvgImage } from '@/utils/svg';
 import { scaleInside } from '@/utils/graphic';
+import { COLORS, FINISHES } from '@/utils/gerber';
+
+export type RenderSide = 'top' | 'bottom';
+export type RenderSolderMask = keyof typeof COLORS;
+export type RenderCopperFinish = keyof typeof FINISHES;
+
+export interface RenderOptions {
+  side: RenderSide;
+  sm: RenderSolderMask;
+  cf: RenderCopperFinish;
+  sp: boolean;
+}
 
 const props = defineProps<{
   layers: InputLayer[];
-  side: 'top' | 'bottom';
+  render: RenderOptions;
 }>();
 
 const image = ref<HTMLImageElement>();
 watch(props, async () => {
-  const stack = await stackup(props.layers);
-  image.value = await loadSvgImage(stack[props.side].svg);
+  const [sm, ss] = COLORS[props.render.sm];
+  const sp = props.render.sp ? FINISHES.tin : 'transparent';
+  const cf = FINISHES[props.render.cf];
+
+  const stack = await stackup(props.layers, {
+    color: { sm, ss, sp, cf },
+  });
+
+  image.value = await loadSvgImage(stack[props.render.side].svg);
 });
 
 const containerRef = ref<HTMLElement>();

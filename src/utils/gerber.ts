@@ -59,3 +59,18 @@ export function mapLayerType(name: string): GerberProps {
 
   return { type, side };
 }
+
+export const COLORS: Record<string, [string, string]> = {
+  'green': ['#004200bf', '#ffffff'],
+  'red': ['#b20000bf', '#ffffff'],
+  'yellow': ['#ff9900bf', '#ffffff'],
+  'blue': ['#004284bf', '#ffffff'],
+  'white': ['#ffffffbf', '#000000'],
+  'black': ['#000000bf', '#ffffff'],
+  'purple': ['#480084bf', '#ffffff'],
+};
+
+export const FINISHES: Record<string, string> = {
+  'gold': '#cc9933',
+  'tin': '#f5f5f5',
+};

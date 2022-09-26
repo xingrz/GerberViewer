@@ -1,6 +1,6 @@
 <template>
-  <panel-unit>
-    <a-button type="primary" @click="showLayers">设置图层</a-button>
+  <panel-unit title="图层">
+    <a-button @click="showLayers" :disabled="props.layers.length == 0">打开图层设置</a-button>
   </panel-unit>
   <a-modal v-model:visible="layersShown" title="图层设置" centered width="1000px">
     <a-row type="flex" :gutter="[8, 8]">
@@ -32,6 +32,7 @@
 import type { InputLayer } from 'pcb-stackup';
 import type { SelectProps } from 'ant-design-vue';
 import type { GerberType } from 'whats-that-gerber';
+
 import { defineEmits, defineProps, ref } from 'vue';
 import { cloneDeep } from 'lodash';
 

@@ -14,28 +14,39 @@
         </a-col>
       </a-row>
     </template>
-    <a-tab-pane key="layers" tab="图层">
+    <a-tab-pane key="options" tab="选项">
       <x-panel>
-        <layers-panel v-model:layers="layers" />
+        <render-panel v-model:side="render.side" v-model:sm="render.sm" v-model:cf="render.cf" v-model:sp="render.sp" />
+        <layers-panel v-model:layers="layers" :render="render" />
       </x-panel>
     </a-tab-pane>
   </x-panel-container>
-  <gerber-view :layers="layers" side="top" :style="{ top: `${canvasTop}px` }" />
+  <gerber-view :layers="layers" :render="render" :style="{ top: `${canvasTop}px` }" />
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
 import type { InputLayer } from 'pcb-stackup';
+import type { RenderOptions } from '@/components/GerberView.vue';
+
+import { reactive, ref } from 'vue';
 
 import XPanelContainer from '@/components/XPanelContainer.vue';
 import XPanel from '@/components/XPanel.vue';
 import GerberView from '@/components/GerberView.vue';
 
 import LayersPanel from '@/panels/LayersPanel.vue';
+import RenderPanel from '@/panels/RenderPanel.vue';
 
 import { loadLayers } from '@/utils/gerber';
 
 const layers = ref<InputLayer[]>([]);
+
+const render = reactive<RenderOptions>({
+  side: 'top',
+  sm: 'green',
+  cf: 'gold',
+  sp: true,
+});
 
 const canvasTop = ref(0);
 function handleResize(height: number): void {
