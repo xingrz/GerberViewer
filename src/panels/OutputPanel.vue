@@ -19,9 +19,21 @@
         </a-col>
       </a-row>
     </a-form-item>
-    <a-form-item :wrapper-col="{ offset: 4 }">
-      <a-button type="primary" :disabled="props.layers.length == 0" :loading="rendering" @click="output">输出文件</a-button>
+    <a-form-item label="浮雕">
+      <a-row type="flex" :gutter="[8]">
+        <a-col>
+          <a-checkbox v-model:checked="relief">
+            输出浮雕材质
+          </a-checkbox>
+          <a-tooltip placement="right" title="可用于 Fusion 360 等 3D 软件用作浮雕材质贴图">
+            <info-circle-outlined />
+          </a-tooltip>
+        </a-col>
+      </a-row>
     </a-form-item>
+    <div>
+      <a-button type="primary" :disabled="props.layers.length == 0" :loading="rendering" @click="output">输出文件</a-button>
+    </div>
   </panel-unit>
 </template>
 
@@ -30,6 +42,7 @@ import type { InputLayer } from 'pcb-stackup';
 import type { RenderOptions } from '@/components/GerberView.vue';
 
 import { defineProps, ref } from 'vue';
+import { InfoCircleOutlined } from '@ant-design/icons-vue';
 import stackup from 'pcb-stackup';
 import { render } from 'gerber-to-svg';
 
@@ -46,6 +59,7 @@ const props = defineProps<{
 
 const format = ref<'svg' | 'png'>('svg');
 const layers = ref(false);
+const relief = ref(false);
 
 const rendering = ref(false);
 async function output(): Promise<void> {
@@ -70,6 +84,23 @@ async function output(): Promise<void> {
     for (const layer of stack.layers) {
       files[`${layer.filename}.${ext}`] = await write(render(layer.converter, {}));
     }
+  }
+
+  if (relief.value) {
+    const reliefStack = await stackup(props.layers, {
+      color: {
+        fr4: 'transparent',
+        cu: '#ffffff',
+        cf: 'transparent',
+        sm: 'transparent',
+        ss: 'transparent',
+        sp: 'transparent',
+        out: 'transparent',
+      },
+    });
+
+    files[`top-relief.png`] = await toPNG(reliefStack.top.svg, '#000000');
+    files[`bottom-relief.png`] = await toPNG(reliefStack.bottom.svg, '#000000');
   }
 
   await outputZip(files, 'pcb.zip');

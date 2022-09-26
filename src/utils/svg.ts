@@ -14,7 +14,7 @@ export async function toSVG(svg: string): Promise<Uint8Array> {
   return new TextEncoder().encode(svg);
 }
 
-export async function toPNG(svg: string): Promise<Uint8Array> {
+export async function toPNG(svg: string, background?: string): Promise<Uint8Array> {
   const img = await loadSvgImage(svg);
   const { width, height } = getSizeInMM(svg);
 
@@ -23,6 +23,12 @@ export async function toPNG(svg: string): Promise<Uint8Array> {
   canvas.height = height * 100;
 
   const ctx = canvas.getContext('2d')!;
+
+  if (background) {
+    ctx.fillStyle = background;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
   ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
   const req = await fetch(canvas.toDataURL('image/png'));

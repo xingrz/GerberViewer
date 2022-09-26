@@ -17,7 +17,7 @@
     <a-tab-pane key="options" tab="选项">
       <x-panel>
         <render-panel v-model:side="render.side" v-model:sm="render.sm" v-model:cf="render.cf" v-model:sp="render.sp" />
-        <layers-panel v-model:layers="layers" :render="render" />
+        <layers-panel v-model:layers="layers" />
       </x-panel>
     </a-tab-pane>
     <a-tab-pane key="output" tab="输出">
