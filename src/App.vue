@@ -47,9 +47,9 @@ const layers = ref<InputLayer[]>([]);
 
 const render = reactive<RenderOptions>({
   side: 'top',
-  sm: 'green',
+  sm: 'blue',
   cf: 'gold',
-  sp: true,
+  sp: false,
 });
 
 const canvasTop = ref(0);
