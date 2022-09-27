@@ -6,9 +6,13 @@
 
 <script lang="ts" setup>
 import type { InputLayer } from 'pcb-stackup';
+import type { IPosition, IScale } from '@/utils/graphic';
 
 import stackup from 'pcb-stackup';
 import { defineProps, reactive, ref, watch } from 'vue';
+
+import { useWheelEvents } from '@/composables/useWheelEvents';
+import { useMouseEvents } from '@/composables/useMouseEvents';
 
 import { loadSvgImage } from '@/utils/svg';
 import { scaleInside } from '@/utils/graphic';
@@ -46,8 +50,11 @@ watch(props, async () => {
 const containerRef = ref<HTMLElement>();
 const canvasRef = ref<HTMLCanvasElement>();
 
-const scale = ref(1);
-const scroll = reactive({ x: 0, y: 0 });
+const translate = reactive<IPosition & IScale>({
+  x: 0, y: 0,
+  scale: 1,
+});
+
 const dragging = ref(false);
 
 function draw(): void {
@@ -63,57 +70,33 @@ function draw(): void {
   if (!ctx) return;
 
   const rect = scaleInside(canvas, image.value);
+  const scale = Math.max(0.5, translate.scale);
 
   ctx.save();
   ctx.translate(canvas.width / 2, canvas.height / 2);
   ctx.drawImage(
     image.value,
-    -rect.width / 2 * scale.value + scroll.x,
-    -rect.height / 2 * scale.value + scroll.y,
-    rect.width * scale.value,
-    rect.height * scale.value
+    -rect.width / 2 * scale + translate.x,
+    -rect.height / 2 * scale + translate.y,
+    rect.width * scale,
+    rect.height * scale
   );
   ctx.restore();
 }
 
 window.addEventListener('resize', draw);
 watch(image, () => {
-  scale.value = 1;
-  scroll.x = 0;
-  scroll.y = 0;
+  translate.scale = 1;
+  translate.x = 0;
+  translate.y = 0;
   draw();
 });
 
-watch(canvasRef, () => {
-  const canvas = canvasRef.value;
-  if (!canvas) return;
+useWheelEvents(canvasRef, translate);
+useMouseEvents(canvasRef, translate, dragging);
 
-  canvas.addEventListener('wheel', (evt) => {
-    evt.preventDefault();
-    if (evt.ctrlKey) {
-      const value = scale.value - evt.deltaY / 100;
-      scale.value = Math.max(0.5, value);
-    } else {
-      scroll.x -= evt.deltaX;
-      scroll.y -= evt.deltaY;
-    }
-    draw();
-  });
-
-  canvas.addEventListener('mousedown', () => {
-    dragging.value = true;
-  });
-  canvas.addEventListener('mouseup', () => {
-    dragging.value = false;
-  });
-  canvas.addEventListener('mousemove', (evt) => {
-    if (dragging.value) {
-      evt.preventDefault();
-      scroll.x += evt.movementX;
-      scroll.y += evt.movementY;
-      draw();
-    }
-  });
+watch(translate, () => {
+  draw();
 });
 </script>
 

@@ -3,6 +3,15 @@ export interface ISize {
   height: number;
 }
 
+export interface IPosition {
+  x: number;
+  y: number;
+}
+
+export interface IScale {
+  scale: number;
+}
+
 export function scaleInside(container: ISize, target: ISize, padding = 0): ISize {
   const ratio = target.width / target.height;
   const canvas = <ISize>{ width: container.width - padding * 2, height: container.height - padding * 2 };
