@@ -16,7 +16,7 @@ import { useMouseEvents } from '@/composables/useMouseEvents';
 import { useClientSize } from '@/composables/useClientSize';
 
 import { loadSvgImage } from '@/utils/svg';
-import { centerOf, scaleInside } from '@/utils/graphic';
+import { centerOf, scaleInside, withIn } from '@/utils/graphic';
 import { COLORS, FINISHES } from '@/utils/gerber';
 
 export type RenderSide = 'top' | 'bottom';
@@ -72,10 +72,14 @@ watch([image, container, translate], () => {
   if (!ctx) return;
 
   const rect = scaleInside(canvas, image.value);
-  const scale = Math.max(0.5, translate.scale);
 
   const canvasCenter = centerOf(canvas);
   const imageCenter = centerOf(rect);
+
+  const scale = translate.scale = Math.max(0.5, translate.scale);
+
+  translate.x = withIn(translate.x, canvasCenter.x + imageCenter.x * scale - 50);
+  translate.y = withIn(translate.y, canvasCenter.y + imageCenter.y * scale - 50);
 
   ctx.save();
   ctx.translate(canvasCenter.x, canvasCenter.y);

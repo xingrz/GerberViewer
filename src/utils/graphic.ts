@@ -27,3 +27,7 @@ export function scaleInside(container: ISize, target: ISize, padding = 0): ISize
 export function centerOf(container: ISize): IPosition {
   return { x: container.width / 2, y: container.height / 2 };
 }
+
+export function withIn(value: number, max: number) {
+  return Math.min(max, Math.max(-max, value));
+}
