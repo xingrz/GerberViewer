@@ -23,3 +23,7 @@ export function scaleInside(container: ISize, target: ISize, padding = 0): ISize
     return matchHeight;
   }
 }
+
+export function centerOf(container: ISize): IPosition {
+  return { x: container.width / 2, y: container.height / 2 };
+}
