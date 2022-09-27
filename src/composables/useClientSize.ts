@@ -1,6 +1,5 @@
 import type { ISize } from '@/utils/graphic';
-import { ref, watch, type Ref } from 'vue';
-import { useEventListener } from './useEventListener';
+import { onBeforeUnmount, onMounted, ref, watch, type Ref } from 'vue';
 
 export function useClientSize(elementRef: Ref<HTMLElement | undefined>): Ref<ISize | undefined> {
   const getSize = (target: HTMLElement | undefined): ISize | undefined => target && {
@@ -10,12 +9,26 @@ export function useClientSize(elementRef: Ref<HTMLElement | undefined>): Ref<ISi
 
   const size = ref<ISize | undefined>(getSize(elementRef.value));
 
-  watch(elementRef, () => {
+  const observer = new ResizeObserver(() => {
     size.value = getSize(elementRef.value);
   });
 
-  useEventListener(window, 'resize', () => {
-    size.value = getSize(elementRef.value);
+  watch(elementRef, () => {
+    if (elementRef.value) {
+      observer.observe(elementRef.value);
+    }
+  });
+
+  onMounted(() => {
+    if (elementRef.value) {
+      observer.observe(elementRef.value);
+    }
+  });
+
+  onBeforeUnmount(() => {
+    if (elementRef.value) {
+      observer.unobserve(elementRef.value);
+    }
   });
 
   return size;

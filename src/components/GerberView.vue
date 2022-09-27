@@ -62,11 +62,11 @@ const dragging = ref(false);
 
 watch([image, container, translate], () => {
   const canvas = canvasRef.value;
-  if (!canvas) return;
-  if (!image.value || !container.value) return;
-
+  if (!canvas || !container.value) return;
   canvas.width = container.value.width;
   canvas.height = container.value.height;
+
+  if (!image.value) return;
 
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
