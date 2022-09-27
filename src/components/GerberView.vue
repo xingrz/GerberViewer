@@ -13,6 +13,7 @@ import { defineProps, reactive, ref, watch } from 'vue';
 
 import { useWheelEvents } from '@/composables/useWheelEvents';
 import { useMouseEvents } from '@/composables/useMouseEvents';
+import { useClientSize } from '@/composables/useClientSize';
 
 import { loadSvgImage } from '@/utils/svg';
 import { scaleInside } from '@/utils/graphic';
@@ -50,6 +51,8 @@ watch(props, async () => {
 const containerRef = ref<HTMLElement>();
 const canvasRef = ref<HTMLCanvasElement>();
 
+const container = useClientSize(containerRef);
+
 const translate = reactive<IPosition & IScale>({
   x: 0, y: 0,
   scale: 1,
@@ -57,14 +60,13 @@ const translate = reactive<IPosition & IScale>({
 
 const dragging = ref(false);
 
-function draw(): void {
-  const container = containerRef.value;
+watch([image, container, translate], () => {
   const canvas = canvasRef.value;
-  if (!container || !canvas) return;
-  if (!image.value) return;
+  if (!canvas) return;
+  if (!image.value || !container.value) return;
 
-  canvas.width = container.clientWidth;
-  canvas.height = container.clientHeight;
+  canvas.width = container.value.width;
+  canvas.height = container.value.height;
 
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
@@ -82,22 +84,16 @@ function draw(): void {
     rect.height * scale
   );
   ctx.restore();
-}
+});
 
-window.addEventListener('resize', draw);
 watch(image, () => {
   translate.scale = 1;
   translate.x = 0;
   translate.y = 0;
-  draw();
 });
 
 useWheelEvents(canvasRef, translate);
 useMouseEvents(canvasRef, translate, dragging);
-
-watch(translate, () => {
-  draw();
-});
 </script>
 
 <style lang="scss" module>

@@ -1,17 +1,30 @@
-import { onBeforeUnmount, onMounted, watch, type Ref } from 'vue';
+import { isRef, onBeforeUnmount, onMounted, unref, watch, type Ref } from 'vue';
 
-export function useEventListener<T extends HTMLElement, K extends keyof GlobalEventHandlersEventMap>(
-  ref: Ref<T | undefined>,
-  type: K, listener: (this: HTMLElement, ev: GlobalEventHandlersEventMap[K]) => unknown
+export function useEventListener<K extends keyof WindowEventMap>(
+  ref: Window,
+  type: K, listener: (this: Window, ev: WindowEventMap[K]) => unknown
+): void;
+
+export function useEventListener<K extends keyof GlobalEventHandlersEventMap>(
+  ref: Ref<GlobalEventHandlers | undefined>,
+  type: K, listener: (this: GlobalEventHandlers, ev: GlobalEventHandlersEventMap[K]) => unknown
+): void;
+
+export function useEventListener<K extends keyof (WindowEventMap | GlobalEventHandlersEventMap)>(
+  ref: Window | Ref<GlobalEventHandlers | undefined>,
+  type: K, listener: (this: Window | GlobalEventHandlers, ev: (WindowEventMap | GlobalEventHandlersEventMap)[K]) => unknown
 ): void {
   const bindListener = () => {
-    ref.value?.addEventListener(type, listener);
+    unref(ref)?.addEventListener(type, listener);
   };
 
-  watch(ref, bindListener);
+  if (isRef(ref)) {
+    watch(ref, bindListener);
+  }
+
   onMounted(bindListener);
 
   onBeforeUnmount(() => {
-    ref.value?.removeEventListener(type, listener);
+    unref(ref)?.removeEventListener(type, listener);
   });
 }
