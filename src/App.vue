@@ -8,7 +8,10 @@
           </a-button>
         </a-col>
         <a-col>
-          <a-upload :custom-request="loadGerber" :show-upload-list="false">
+          <a-upload
+            :custom-request="loadGerber"
+            :show-upload-list="false"
+            accept=".zip,application/zip">
             <a-button type="primary" :loading="loading">打开 Gerber 文件</a-button>
           </a-upload>
         </a-col>
