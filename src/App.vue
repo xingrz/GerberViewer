@@ -19,11 +19,7 @@
     </template>
     <a-tab-pane key="options" tab="选项">
       <x-panel>
-        <render-panel
-          v-model:side="render.side"
-          v-model:sm="render.sm"
-          v-model:cf="render.cf"
-          v-model:sp="render.sp" />
+        <render-panel v-model:render="render" />
         <layers-panel v-model:layers="layers" />
       </x-panel>
     </a-tab-pane>
@@ -36,9 +32,7 @@
 
 <script lang="ts" setup>
 import type { InputLayer } from 'pcb-stackup';
-import type { RenderOptions } from '@/components/GerberView.vue';
-
-import { reactive, ref } from 'vue';
+import { ref } from 'vue';
 
 import XPanelContainer from '@/components/XPanelContainer.vue';
 import XPanel from '@/components/XPanel.vue';
@@ -48,13 +42,13 @@ import LayersPanel from '@/panels/LayersPanel.vue';
 import RenderPanel from '@/panels/RenderPanel.vue';
 import OutputPanel from '@/panels/OutputPanel.vue';
 
-import { loadLayers } from '@/utils/gerber';
+import { loadLayers, type RenderOptions } from '@/utils/gerber';
 
 const gerber = ref<File>();
 
 const layers = ref<InputLayer[]>([]);
 
-const render = reactive<RenderOptions>({
+const render = ref<RenderOptions>({
   side: 'top',
   sm: 'blue',
   cf: 'gold',

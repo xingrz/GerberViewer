@@ -44,17 +44,14 @@
 </template>
 
 <script lang="ts" setup>
-import type { InputLayer } from 'pcb-stackup';
-import type { RenderOptions } from '@/components/GerberView.vue';
-
 import { defineProps, ref } from 'vue';
 import { InfoCircleOutlined } from '@ant-design/icons-vue';
-import stackup from 'pcb-stackup';
+import stackup, { type InputLayer } from 'pcb-stackup';
 import { render } from 'gerber-to-svg';
 
 import PanelUnit from '@/components/XPanelUnit.vue';
 
-import { COLORS, FINISHES, PASTE } from '@/utils/gerber';
+import { renderStack, type RenderOptions } from '@/utils/gerber';
 import { toPNG, toSVG } from '@/utils/svg';
 import { outputZip } from '@/utils/zip';
 
@@ -72,12 +69,7 @@ const rendering = ref(false);
 async function output(): Promise<void> {
   rendering.value = true;
 
-  const [sm, ss] = COLORS[props.render.sm];
-  const sp = props.render.sp ? PASTE : 'transparent';
-  const cf = FINISHES[props.render.cf];
-  const stack = await stackup(props.layers, {
-    color: { sm, ss, sp, cf },
-  });
+  const stack = await renderStack(props.layers, props.render);
 
   const files: Record<string, Uint8Array> = {};
 

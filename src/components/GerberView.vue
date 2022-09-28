@@ -8,7 +8,6 @@
 import type { InputLayer } from 'pcb-stackup';
 import type { IPosition, IScale } from '@/utils/graphic';
 
-import stackup from 'pcb-stackup';
 import { defineProps, reactive, ref, watch } from 'vue';
 
 import { useWheelEvents } from '@/composables/useWheelEvents';
@@ -17,18 +16,7 @@ import { useClientSize } from '@/composables/useClientSize';
 
 import { loadSvgImage } from '@/utils/svg';
 import { centerOf, scaleInside, withIn } from '@/utils/graphic';
-import { COLORS, FINISHES, PASTE } from '@/utils/gerber';
-
-export type RenderSide = 'top' | 'bottom';
-export type RenderSolderMask = keyof typeof COLORS;
-export type RenderCopperFinish = keyof typeof FINISHES;
-
-export interface RenderOptions {
-  side: RenderSide;
-  sm: RenderSolderMask;
-  cf: RenderCopperFinish;
-  sp: boolean;
-}
+import { renderStack, type RenderOptions } from '@/utils/gerber';
 
 const props = defineProps<{
   layers: InputLayer[];
@@ -37,14 +25,7 @@ const props = defineProps<{
 
 const image = ref<HTMLImageElement>();
 watch(props, async () => {
-  const [sm, ss] = COLORS[props.render.sm];
-  const sp = props.render.sp ? PASTE : 'transparent';
-  const cf = FINISHES[props.render.cf];
-
-  const stack = await stackup(props.layers, {
-    color: { sm, ss, sp, cf },
-  });
-
+  const stack = await renderStack(props.layers, props.render);
   image.value = await loadSvgImage(stack[props.render.side].svg);
 });
 

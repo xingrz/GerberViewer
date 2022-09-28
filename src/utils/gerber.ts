@@ -1,7 +1,7 @@
+import type { GerberProps, GerberSide, GerberType } from 'whats-that-gerber';
 import promisify from 'pify';
 import { unzip as _unzip } from 'fflate';
-import type { InputLayer } from 'pcb-stackup';
-import type { GerberProps, GerberSide, GerberType } from 'whats-that-gerber';
+import stackup, { type InputLayer, type Stackup } from 'pcb-stackup';
 import { Buffer } from 'buffer';
 
 const unzip = promisify(_unzip);
@@ -91,3 +91,24 @@ export const FINISHES: Record<string, string> = {
 };
 
 export const PASTE = '#999999';
+
+export type RenderSide = 'top' | 'bottom';
+export type RenderSolderMask = keyof typeof COLORS;
+export type RenderCopperFinish = keyof typeof FINISHES;
+
+export interface RenderOptions {
+  side: RenderSide;
+  sm: RenderSolderMask;
+  cf: RenderCopperFinish;
+  sp: boolean;
+}
+
+export async function renderStack(layers: InputLayer[], options: RenderOptions): Promise<Stackup<string, InputLayer>> {
+  const [sm, ss] = COLORS[options.sm];
+  const sp = options.sp ? PASTE : 'transparent';
+  const cf = FINISHES[options.cf];
+
+  return await stackup(layers, {
+    color: { sm, ss, sp, cf },
+  });
+}
