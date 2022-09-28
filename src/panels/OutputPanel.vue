@@ -34,7 +34,7 @@
     <div>
       <a-button
         type="primary"
-        :disabled="props.layers.length == 0"
+        :disabled="!props.gerber || props.layers.length == 0"
         :loading="rendering"
         @click="output">
         输出文件
@@ -59,6 +59,7 @@ import { toPNG, toSVG } from '@/utils/svg';
 import { outputZip } from '@/utils/zip';
 
 const props = defineProps<{
+  gerber: File | undefined;
   layers: InputLayer[];
   render: RenderOptions;
 }>();
@@ -109,8 +110,12 @@ async function output(): Promise<void> {
     files[`bottom-relief.png`] = await toPNG(reliefStack.bottom.svg, '#000000');
   }
 
-  await outputZip(files, 'pcb.zip');
+  await outputZip(files, `${basename(props.gerber!.name)}-img.zip`);
 
   rendering.value = false;
+}
+
+function basename(name: string): string{
+  return name.replace(/\..+$/, '');
 }
 </script>

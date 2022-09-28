@@ -28,7 +28,7 @@
       </x-panel>
     </a-tab-pane>
     <a-tab-pane key="output" tab="输出">
-      <output-panel :layers="layers" :render="render" />
+      <output-panel :gerber="gerber" :layers="layers" :render="render" />
     </a-tab-pane>
   </x-panel-container>
   <gerber-view :layers="layers" :render="render" :style="{ top: `${canvasTop}px` }" />
@@ -50,6 +50,8 @@ import OutputPanel from '@/panels/OutputPanel.vue';
 
 import { loadLayers } from '@/utils/gerber';
 
+const gerber = ref<File>();
+
 const layers = ref<InputLayer[]>([]);
 
 const render = reactive<RenderOptions>({
@@ -67,6 +69,7 @@ function handleResize(height: number): void {
 const loading = ref(false);
 async function loadGerber({ file }: { file: File }): Promise<void> {
   loading.value = true;
+  gerber.value = file;
   layers.value = await loadLayers(file);
   loading.value = false;
 }
