@@ -67,6 +67,7 @@ watch([image, container, translate], () => {
   canvas.height = container.value.height;
 
   if (!image.value) return;
+  if (!image.value.width || !image.value.height) return;
 
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
