@@ -40,7 +40,7 @@
       <a-row type="flex" :gutter="[8]">
         <a-col>
           <a-checkbox :checked="props.sp" @update:checked="(v: boolean) => emit('update:sp', v)">
-            绘制喷锡
+            绘制锡膏
           </a-checkbox>
         </a-col>
       </a-row>

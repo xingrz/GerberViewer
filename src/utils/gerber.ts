@@ -89,3 +89,5 @@ export const FINISHES: Record<string, string> = {
   'gold': '#cc9933',
   'tin': '#f5f5f5',
 };
+
+export const PASTE = '#999999';

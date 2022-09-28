@@ -48,7 +48,7 @@ import { render } from 'gerber-to-svg';
 
 import PanelUnit from '@/components/XPanelUnit.vue';
 
-import { COLORS, FINISHES } from '@/utils/gerber';
+import { COLORS, FINISHES, PASTE } from '@/utils/gerber';
 import { toPNG, toSVG } from '@/utils/svg';
 import { outputZip } from '@/utils/zip';
 
@@ -66,7 +66,7 @@ async function output(): Promise<void> {
   rendering.value = true;
 
   const [sm, ss] = COLORS[props.render.sm];
-  const sp = props.render.sp ? FINISHES.tin : 'transparent';
+  const sp = props.render.sp ? PASTE : 'transparent';
   const cf = FINISHES[props.render.cf];
   const stack = await stackup(props.layers, {
     color: { sm, ss, sp, cf },

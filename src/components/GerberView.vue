@@ -17,7 +17,7 @@ import { useClientSize } from '@/composables/useClientSize';
 
 import { loadSvgImage } from '@/utils/svg';
 import { centerOf, scaleInside, withIn } from '@/utils/graphic';
-import { COLORS, FINISHES } from '@/utils/gerber';
+import { COLORS, FINISHES, PASTE } from '@/utils/gerber';
 
 export type RenderSide = 'top' | 'bottom';
 export type RenderSolderMask = keyof typeof COLORS;
@@ -38,7 +38,7 @@ const props = defineProps<{
 const image = ref<HTMLImageElement>();
 watch(props, async () => {
   const [sm, ss] = COLORS[props.render.sm];
-  const sp = props.render.sp ? FINISHES.tin : 'transparent';
+  const sp = props.render.sp ? PASTE : 'transparent';
   const cf = FINISHES[props.render.cf];
 
   const stack = await stackup(props.layers, {
