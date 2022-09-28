@@ -10,8 +10,8 @@
         </a-col>
         <a-col :xs="24" :md="10" :lg="8">
           <a-space>
-            <a-select v-model:value="layer.type" :options="gerberTypes" size="middle" />
-            <a-radio-group v-model:value="layer.side" v-if="hasSide(layer.type)" size="middle">
+            <a-select v-model:value="layer.type" :options="gerberTypes" :style="{ width: '6em' }" />
+            <a-radio-group v-model:value="layer.side" v-if="hasSide(layer.type)">
               <a-radio-button value="top">顶层</a-radio-button>
               <a-radio-button value="bottom">底层</a-radio-button>
               <a-radio-button value="inner" v-if="layer.type == 'copper'">内层</a-radio-button>
@@ -73,10 +73,10 @@ const gerberTypes: SelectProps['options'] = [
   { value: 'copper', label: '线路' },
   { value: 'soldermask', label: '阻焊' },
   { value: 'silkscreen', label: '丝印' },
-  { value: 'solderpaste', label: '喷锡' },
+  { value: 'solderpaste', label: '钢网' },
   { value: 'drill', label: '钻孔' },
   { value: 'outline', label: '轮廓' },
-  { value: null, label: '无' },
+  { value: null, label: '忽略' },
 ];
 
 function hasSide(type: GerberType | undefined): boolean {
