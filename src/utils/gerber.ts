@@ -27,11 +27,26 @@ export function mapLayerType(name: string): GerberProps {
 
   const segments = name.toLowerCase().split(/_|-|\./);
 
-  if (segments[segments.length - 1] == 'drl') {
+  const ext = segments[segments.length - 1];
+  switch (ext) {
+    case 'gtl': return { type: 'copper', side: 'top' };
+    case 'gto': return { type: 'silkscreen', side: 'top' };
+    case 'gtp': return { type: 'solderpaste', side: 'top' };
+    case 'gts': return { type: 'soldermask', side: 'top' };
+    case 'gbl': return { type: 'copper', side: 'bottom' };
+    case 'gbo': return { type: 'silkscreen', side: 'bottom' };
+    case 'gbp': return { type: 'solderpaste', side: 'bottom' };
+    case 'gbs': return { type: 'soldermask', side: 'bottom' };
+    case 'gko': return { type: 'outline', side: 'all' };
+    case 'drl': return { type: 'drill', side: 'all' };
+    default: break;
+  }
+
+  if (segments.find(s => s.includes('drill'))) {
     return { type: 'drill', side: 'all' };
   }
 
-  if (segments.find(s => s.startsWith('edge'))) {
+  if (segments.find(s => s.includes('edge')) || segments.find(s => s.includes('outline'))) {
     return { type: 'outline', side: 'all' };
   }
 
@@ -47,9 +62,9 @@ export function mapLayerType(name: string): GerberProps {
 
   if (segments.find(s => s.startsWith('in'))) {
     side = 'inner';
-  } else if (segments.includes('f') || segments.includes('top')) {
+  } else if (segments.includes('f') || segments.find(s => s.includes('top'))) {
     side = 'top';
-  } else if (segments.includes('b') || segments.includes('bottom')) {
+  } else if (segments.includes('b') || segments.find(s => s.includes('bottom'))) {
     side = 'bottom';
   }
 
