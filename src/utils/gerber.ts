@@ -42,10 +42,6 @@ export function mapLayerType(name: string): GerberProps {
     default: break;
   }
 
-  if (segments.find(s => s.includes('drill'))) {
-    return { type: 'drill', side: 'all' };
-  }
-
   if (segments.find(s => s.includes('edge')) || segments.find(s => s.includes('outline'))) {
     return { type: 'outline', side: 'all' };
   }
