@@ -10,7 +10,8 @@
         </a-col>
         <a-col :xs="24" :md="10" :lg="8">
           <a-space>
-            <a-select v-model:value="layer.type" :options="gerberTypes" :style="{ width: '6em' }" />
+            <a-select v-model:value="layer.type" :options="gerberTypes" :style="{ width: '6em' }"
+              @change="guessLayerSize(layer)" />
             <a-radio-group v-model:value="layer.side" v-if="hasSide(layer.type)">
               <a-radio-button value="top">顶层</a-radio-button>
               <a-radio-button value="bottom">底层</a-radio-button>
@@ -81,6 +82,15 @@ const gerberTypes: SelectProps['options'] = [
 
 function hasSide(type: GerberType | undefined): boolean {
   return !!type && ['copper', 'soldermask', 'silkscreen', 'solderpaste'].includes(type);
+}
+
+function guessLayerSize(layer: InputLayer): void {
+  if (layer.type == 'outline') {
+    layer.side = 'all';
+  } else if (!layer.side) {
+    const { side } = mapLayerType(layer.filename!);
+    layer.side = side || 'top';
+  }
 }
 </script>
 
