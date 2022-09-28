@@ -13,8 +13,7 @@
     <a-form-item label="阻焊">
       <a-row type="flex" :gutter="[8, 8]">
         <a-col>
-          <a-select :value="props.sm" @update:value="(v: RenderSolderMask) => emit('update:sm', v)"
-            :style="{ width: '10em' }">
+          <a-select :value="props.sm" :style="{ width: '10em' }" @update:value="(v: RenderSolderMask) => emit('update:sm', v)">
             <a-select-option value="green">绿色</a-select-option>
             <a-select-option value="red">红色</a-select-option>
             <a-select-option value="yellow">黄色</a-select-option>

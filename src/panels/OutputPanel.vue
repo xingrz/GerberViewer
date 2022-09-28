@@ -32,7 +32,13 @@
       </a-row>
     </a-form-item>
     <div>
-      <a-button type="primary" :disabled="props.layers.length == 0" :loading="rendering" @click="output">输出文件</a-button>
+      <a-button
+        type="primary"
+        :disabled="props.layers.length == 0"
+        :loading="rendering"
+        @click="output">
+        输出文件
+      </a-button>
     </div>
   </panel-unit>
 </template>

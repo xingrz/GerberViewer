@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.container" :ref="(ref) => containerRef = (ref as HTMLElement)">
+  <div :ref="(ref) => containerRef = (ref as HTMLElement)" :class="$style.container">
     <canvas :ref="(ref) => canvasRef = (ref as HTMLCanvasElement)" :class="{ [$style.dragging]: dragging }" />
   </div>
 </template>

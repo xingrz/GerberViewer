@@ -1,5 +1,5 @@
 <template>
-  <div class="x-panel-container" :ref="(ref) => container = ref as Element">
+  <div :ref="(ref) => container = ref as Element" class="x-panel-container">
     <a-tabs type="card" @change="handleTabChange">
       <template #rightExtra>
         <slot name="extra" />

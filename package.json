@@ -44,8 +44,8 @@
       "browser": true
     },
     "extends": [
-      "plugin:vue/vue3-essential",
       "eslint:recommended",
+      "plugin:vue/vue3-recommended",
       "@vue/typescript/recommended"
     ],
     "parserOptions": {
@@ -53,7 +53,38 @@
     },
     "rules": {
       "@typescript-eslint/ban-ts-comment": "off",
-      "@typescript-eslint/no-non-null-assertion": "off"
+      "@typescript-eslint/no-non-null-assertion": "off",
+      "@typescript-eslint/type-annotation-spacing": "warn",
+      "vue/max-attributes-per-line": [
+        "warn",
+        {
+          "singleline": {
+            "max": 3
+          }
+        }
+      ],
+      "vue/singleline-html-element-content-newline": "off",
+      "vue/html-closing-bracket-newline": "off",
+      "vue/array-bracket-spacing": "warn",
+      "vue/arrow-spacing": "warn",
+      "vue/block-spacing": "warn",
+      "vue/comma-spacing": "warn",
+      "vue/key-spacing": [
+        "warn",
+        {
+          "beforeColon": false,
+          "afterColon": true
+        }
+      ],
+      "vue/keyword-spacing": "warn",
+      "vue/object-curly-spacing": [
+        "warn",
+        "always"
+      ],
+      "vue/prefer-template": "warn",
+      "vue/space-infix-ops": "warn",
+      "vue/space-unary-ops": "warn",
+      "vue/template-curly-spacing": "warn"
     }
   },
   "browserslist": [

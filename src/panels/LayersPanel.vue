@@ -1,21 +1,28 @@
 <template>
   <panel-unit title="图层">
-    <a-button @click="showLayers" :disabled="props.layers.length == 0">打开图层设置</a-button>
+    <a-button :disabled="props.layers.length == 0" @click="showLayers">打开图层设置</a-button>
   </panel-unit>
-  <a-modal v-model:visible="layersShown" title="图层设置" centered width="1000px">
+  <a-modal
+    v-model:visible="layersShown"
+    title="图层设置"
+    centered
+    width="1000px">
     <a-row type="flex" :gutter="[8, 8]">
       <template v-for="layer in layers" :key="layer.filename!">
         <a-col :xs="24" :md="14" :lg="16">
-          <span :class="$style.layerName">{{layer.filename}}</span>
+          <span :class="$style.layerName">{{ layer.filename }}</span>
         </a-col>
         <a-col :xs="24" :md="10" :lg="8">
           <a-space>
-            <a-select v-model:value="layer.type" :options="gerberTypes" :style="{ width: '6em' }"
+            <a-select
+              v-model:value="layer.type"
+              :options="gerberTypes"
+              :style="{ width: '6em' }"
               @change="guessLayerSide(layer)" />
-            <a-radio-group v-model:value="layer.side" v-if="hasSide(layer.type)">
+            <a-radio-group v-if="hasSide(layer.type)" v-model:value="layer.side">
               <a-radio-button value="top">顶层</a-radio-button>
               <a-radio-button value="bottom">底层</a-radio-button>
-              <a-radio-button value="inner" v-if="layer.type == 'copper'">内层</a-radio-button>
+              <a-radio-button v-if="layer.type == 'copper'" value="inner">内层</a-radio-button>
             </a-radio-group>
           </a-space>
         </a-col>

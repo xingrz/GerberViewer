@@ -8,7 +8,7 @@
           </a-button>
         </a-col>
         <a-col>
-          <a-upload :customRequest="loadGerber" :showUploadList="false">
+          <a-upload :custom-request="loadGerber" :show-upload-list="false">
             <a-button type="primary" :loading="loading">打开 Gerber 文件</a-button>
           </a-upload>
         </a-col>
@@ -16,7 +16,11 @@
     </template>
     <a-tab-pane key="options" tab="选项">
       <x-panel>
-        <render-panel v-model:side="render.side" v-model:sm="render.sm" v-model:cf="render.cf" v-model:sp="render.sp" />
+        <render-panel
+          v-model:side="render.side"
+          v-model:sm="render.sm"
+          v-model:cf="render.cf"
+          v-model:sp="render.sp" />
         <layers-panel v-model:layers="layers" />
       </x-panel>
     </a-tab-pane>
