@@ -70,6 +70,11 @@ async function loadGerber({ file }: { file: File }): Promise<void> {
 </script>
 
 <style lang="scss">
+html,
+body {
+  overscroll-behavior-x: none;
+}
+
 body,
 .x-panel-container {
   background: #263238;
