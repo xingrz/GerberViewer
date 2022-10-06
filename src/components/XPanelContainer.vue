@@ -1,6 +1,16 @@
 <template>
-  <div :ref="(ref) => container = ref as Element" class="x-panel-container">
-    <a-tabs type="card" @change="handleTabChange">
+  <div :ref="(ref) => container = ref as HTMLElement" class="x-panel-container">
+    <a-tabs :class="{ [$style.collapsed]: collapsed }" type="card" @change="handleTabChange">
+      <template #leftExtra>
+        <div :style="{ marginRight: '10px' }">
+          <a-button ghost @click="handleCollapse">
+            <template #icon>
+              <vertical-align-bottom-outlined v-if="collapsed" />
+              <vertical-align-top-outlined v-else />
+            </template>
+          </a-button>
+        </div>
+      </template>
       <template #rightExtra>
         <slot name="extra" />
       </template>
@@ -10,22 +20,26 @@
 </template>
 
 <script lang="ts" setup>
-import { defineEmits, nextTick, ref, watch } from 'vue';
+import { defineEmits, ref, watch } from 'vue';
+import { VerticalAlignTopOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons-vue';
+
+import { useClientSize } from '@/composables/useClientSize';
 
 const emit = defineEmits<{
   (e: 'resize', height: number): void;
 }>();
 
-const container = ref<Element>();
-function handleTabChange(): void {
-  nextTick(() => {
-    if (container.value) {
-      emit('resize', container.value.clientHeight);
-    }
-  });
+const collapsed = ref(false);
+
+const container = ref<HTMLElement>();
+const containerSize = useClientSize(container);
+watch(containerSize, () => {
+  emit('resize', containerSize.value!.height);
+});
+
+function handleCollapse() {
+  collapsed.value = !collapsed.value;
 }
-watch(container, handleTabChange);
-window.setInterval(handleTabChange, 1000);
 </script>
 
 <style lang="scss">
@@ -75,6 +89,24 @@ window.setInterval(handleTabChange, 1000);
     &:last-of-type {
       margin-bottom: 0;
     }
+  }
+}
+</style>
+
+<style lang="scss" module>
+.collapsed {
+
+  :global(.ant-tabs-content-holder),
+  :global(.ant-tabs-nav-list) {
+    display: none !important;
+  }
+
+  :global(.ant-tabs-nav) {
+    margin-bottom: 0;
+  }
+
+  :global(.ant-tabs-nav::before) {
+    border-bottom: none;
   }
 }
 </style>
