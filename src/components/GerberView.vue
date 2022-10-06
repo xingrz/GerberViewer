@@ -36,7 +36,7 @@ const container = useClientSize(containerRef);
 
 const translate = reactive<IPosition & IScale>({
   x: 0, y: 0,
-  scale: 1,
+  scale: 0,
 });
 
 const dragging = ref(false);
@@ -58,7 +58,8 @@ watch([image, container, translate], () => {
   const canvasCenter = centerOf(canvas);
   const imageCenter = centerOf(rect);
 
-  const scale = translate.scale = Math.max(0.5, translate.scale);
+  translate.scale = Math.min(5, Math.max(-2, translate.scale));
+  const scale = Math.pow(2, translate.scale);
 
   translate.x = withIn(translate.x, canvasCenter.x + imageCenter.x * scale - 50);
   translate.y = withIn(translate.y, canvasCenter.y + imageCenter.y * scale - 50);
@@ -73,7 +74,7 @@ watch([image, container, translate], () => {
 });
 
 watch(image, () => {
-  translate.scale = 1;
+  translate.scale = 0;
   translate.x = 0;
   translate.y = 0;
 });

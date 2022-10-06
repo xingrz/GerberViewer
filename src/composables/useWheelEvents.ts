@@ -7,7 +7,7 @@ export function useWheelEvents(ref: Ref<HTMLElement | undefined>, translate: IPo
     evt.preventDefault();
     if (evt.ctrlKey) {
       const value = translate.scale - evt.deltaY / 100;
-      translate.scale = Math.max(0, value);
+      translate.scale = value;
     } else {
       translate.x -= evt.deltaX;
       translate.y -= evt.deltaY;
