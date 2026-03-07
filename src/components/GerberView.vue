@@ -12,11 +12,13 @@
         <template #icon><github-outlined /></template>
       </a-button>
       <a-dropdown :trigger="['click']" placement="topLeft">
-        <a-button type="link" size="small" :class="$style.infoLink">{{ localeLabel }}</a-button>
+        <a-button type="link" size="small" :class="$style.infoLink">
+          <template #icon><translation-outlined /></template>
+        </a-button>
         <template #overlay>
           <a-menu
             :selected-keys="[locale]"
-            @click="({ key }: { key: string }) => locale = key">
+            @click="({ key }: { key: string }) => switchLocale(key)">
             <a-menu-item v-for="item in locales" :key="item.value">
               {{ item.label }}
             </a-menu-item>
@@ -38,9 +40,9 @@ import type { IPosition, IScale } from '@/utils/graphic';
 import { computed, reactive, ref, useTemplateRef, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { message } from 'ant-design-vue';
-import { GithubOutlined } from '@ant-design/icons-vue';
+import { GithubOutlined, TranslationOutlined } from '@ant-design/icons-vue';
 
-import { locales } from '@/i18n';
+import { locales, saveLocalePreference } from '@/i18n';
 
 import { useWheelEvents } from '@/composables/useWheelEvents';
 import { useMouseEvents } from '@/composables/useMouseEvents';
@@ -57,7 +59,11 @@ const props = defineProps<{
 }>();
 
 const { t, locale } = useI18n();
-const localeLabel = computed(() => locales.find((l) => l.value === locale.value)?.label);
+
+function switchLocale(key: string): void {
+  locale.value = key;
+  saveLocalePreference(key);
+}
 
 const image = ref<HTMLImageElement>();
 let renderTaskId = 0;
