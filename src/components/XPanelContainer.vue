@@ -1,5 +1,5 @@
 <template>
-  <div :ref="(ref) => container = ref as HTMLElement" class="x-panel-container">
+  <div ref="container" class="x-panel-container">
     <a-tabs :class="{ [$style.collapsed]: collapsed }" type="card" @change="handleTabChange">
       <template #leftExtra>
         <div :style="{ marginRight: '10px' }">
@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineEmits, ref, watch } from 'vue';
+import { ref, useTemplateRef, watch } from 'vue';
 import { VerticalAlignTopOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons-vue';
 
 import { useClientSize } from '@/composables/useClientSize';
@@ -31,7 +31,7 @@ const emit = defineEmits<{
 
 const collapsed = ref(false);
 
-const container = ref<HTMLElement>();
+const container = useTemplateRef<HTMLElement>('container');
 const containerSize = useClientSize(container);
 watch(containerSize, () => {
   emit('resize', containerSize.value!.height);
@@ -39,6 +39,11 @@ watch(containerSize, () => {
 
 function handleCollapse() {
   collapsed.value = !collapsed.value;
+}
+
+function handleTabChange() {
+  if (!containerSize.value) return;
+  emit('resize', containerSize.value.height);
 }
 </script>
 

@@ -1,10 +1,22 @@
 import process from 'process';
-window.process = process;
+
+const runtimeGlobal = globalThis as typeof globalThis & {
+  global?: typeof globalThis;
+  process?: typeof process;
+};
+
+runtimeGlobal.process = process;
+if (typeof runtimeGlobal.process.nextTick !== 'function') {
+  runtimeGlobal.process.nextTick = ((callback: (...args: unknown[]) => void, ...args: unknown[]) => {
+    queueMicrotask(() => callback(...args));
+  }) as typeof process.nextTick;
+}
+runtimeGlobal.global = runtimeGlobal;
 
 import { createApp } from 'vue';
 
 import Antd from 'ant-design-vue';
-import 'ant-design-vue/dist/antd.css';
+import 'ant-design-vue/dist/reset.css';
 
 import App from '@/App.vue';
 

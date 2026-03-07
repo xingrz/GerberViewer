@@ -15,5 +15,5 @@ export async function outputZip(files: Record<string, Uint8Array>, name: string)
   }
 
   const dist = await zip(entries);
-  saveAs(new Blob([dist], { type: 'application/zip' }), name);
+  saveAs(new Blob([new Uint8Array(dist)], { type: 'application/zip' }), name);
 }

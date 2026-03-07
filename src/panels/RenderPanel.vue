@@ -1,7 +1,7 @@
 <template>
   <panel-unit title="渲染">
     <a-form-item label="显示">
-      <a-row type="flex" :gutter="[8]">
+      <a-row :gutter="[8]">
         <a-col>
           <a-radio-group v-model:value="render.side">
             <a-radio-button value="top">顶层</a-radio-button>
@@ -11,7 +11,7 @@
       </a-row>
     </a-form-item>
     <a-form-item label="阻焊">
-      <a-row type="flex" :gutter="[8, 8]">
+      <a-row :gutter="[8, 8]">
         <a-col>
           <a-select v-model:value="render.sm" :style="{ width: '10em' }">
             <a-select-option value="green">绿色</a-select-option>
@@ -26,7 +26,7 @@
       </a-row>
     </a-form-item>
     <a-form-item label="裸铜">
-      <a-row type="flex" :gutter="[8]">
+      <a-row :gutter="[8]">
         <a-col>
           <a-radio-group v-model:value="render.cf">
             <a-radio-button value="tin">喷锡</a-radio-button>
@@ -36,7 +36,7 @@
       </a-row>
     </a-form-item>
     <a-form-item label="焊盘">
-      <a-row type="flex" :gutter="[8]">
+      <a-row :gutter="[8]">
         <a-col>
           <a-checkbox v-model:checked="render.sp">
             绘制锡膏
@@ -49,7 +49,7 @@
 
 <script lang="ts" setup>
 import type { RenderOptions } from '@/utils/gerber';
-import { defineProps, reactive } from 'vue';
+import { reactive } from 'vue';
 
 import PanelUnit from '@/components/XPanelUnit.vue';
 

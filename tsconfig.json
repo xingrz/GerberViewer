@@ -1,5 +1,5 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.web.json",
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
@@ -15,9 +15,12 @@
   },
   "include": [
     "src/**/*.ts",
+    "src/**/*.d.ts",
     "src/**/*.vue",
+    "vite.config.ts",
   ],
   "exclude": [
+    "dist",
     "node_modules",
   ],
 }

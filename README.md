@@ -17,6 +17,8 @@ View gerber files in your browser, and render them as SVG or PNG.
 
 ```sh
 npm install
+npm run lint
+npm run typecheck
 npm run dev
 ```
 

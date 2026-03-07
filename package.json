@@ -2,95 +2,50 @@
   "name": "gerber-viewer",
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 8080",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "npm run typecheck && vite build",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc --noEmit",
+    "lint": "eslint . --ext .ts,.vue,.js,.cjs,.mjs"
   },
   "dependencies": {
-    "ant-design-vue": "^3.2.12",
+    "ant-design-vue": "^4.2.6",
     "buffer": "^6.0.3",
     "events": "^3.3.0",
-    "fflate": "^0.7.3",
+    "fflate": "^0.8.2",
     "file-saver": "^2.0.5",
     "gerber-to-svg": "^4.2.8",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "pcb-stackup": "^4.2.8",
     "pify": "^6.1.0",
     "process": "^0.11.10",
-    "util": "^0.12.4",
-    "vue": "^3.2.39",
+    "util": "^0.12.5",
+    "vue": "^3.5.29",
     "whats-that-gerber": "^4.2.7"
   },
   "devDependencies": {
-    "@nabla/vite-plugin-eslint": "^1.4.1",
-    "@types/file-saver": "^2.0.5",
-    "@types/lodash": "^4.14.185",
-    "@types/node": "^18.7.20",
-    "@types/pify": "^5.0.1",
-    "@typescript-eslint/eslint-plugin": "^5.38.0",
-    "@typescript-eslint/parser": "^5.38.0",
-    "@vitejs/plugin-vue": "^3.1.0",
-    "@vue/compiler-sfc": "^3.2.39",
-    "@vue/eslint-config-typescript": "^11.0.2",
-    "@vue/tsconfig": "^0.1.3",
-    "eslint": "^8.24.0",
-    "eslint-plugin-vue": "^9.5.1",
-    "sass": "^1.55.0",
-    "typescript": "^4.8.3",
-    "vite": "^3.1.3"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "browser": true
-    },
-    "extends": [
-      "eslint:recommended",
-      "plugin:vue/vue3-recommended",
-      "@vue/typescript/recommended"
-    ],
-    "parserOptions": {
-      "ecmaVersion": 2020
-    },
-    "rules": {
-      "@typescript-eslint/ban-ts-comment": "off",
-      "@typescript-eslint/no-non-null-assertion": "off",
-      "@typescript-eslint/type-annotation-spacing": "warn",
-      "vue/max-attributes-per-line": [
-        "warn",
-        {
-          "singleline": {
-            "max": 3
-          }
-        }
-      ],
-      "vue/singleline-html-element-content-newline": "off",
-      "vue/html-closing-bracket-newline": "off",
-      "vue/array-bracket-spacing": "warn",
-      "vue/arrow-spacing": "warn",
-      "vue/block-spacing": "warn",
-      "vue/comma-spacing": "warn",
-      "vue/key-spacing": [
-        "warn",
-        {
-          "beforeColon": false,
-          "afterColon": true
-        }
-      ],
-      "vue/keyword-spacing": "warn",
-      "vue/object-curly-spacing": [
-        "warn",
-        "always"
-      ],
-      "vue/prefer-template": "warn",
-      "vue/space-infix-ops": "warn",
-      "vue/space-unary-ops": "warn",
-      "vue/template-curly-spacing": "warn"
-    }
+    "@types/file-saver": "^2.0.7",
+    "@types/lodash": "^4.17.24",
+    "@types/node": "^25.3.5",
+    "@typescript-eslint/eslint-plugin": "^8.56.1",
+    "@typescript-eslint/parser": "^8.56.1",
+    "@vitejs/plugin-vue": "^6.0.4",
+    "@vue/compiler-sfc": "^3.5.29",
+    "@vue/eslint-config-typescript": "^14.7.0",
+    "@vue/tsconfig": "^0.9.0",
+    "eslint": "^10.0.3",
+    "eslint-plugin-vue": "^10.8.0",
+    "sass": "^1.97.3",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1",
+    "vue-tsc": "^3.2.5"
   },
   "browserslist": [
     "> 1%",
     "last 2 versions",
     "not dead",
     "not ie 11"
-  ]
+  ],
+  "engines": {
+    "node": ">=20.19.0"
+  }
 }

@@ -1,6 +1,6 @@
 <template>
-  <div :ref="(ref) => containerRef = (ref as HTMLElement)" :class="$style.container">
-    <canvas :ref="(ref) => canvasRef = (ref as HTMLCanvasElement)" :class="{ [$style.dragging]: dragging }" />
+  <div ref="container" :class="$style.container">
+    <canvas ref="canvas" :class="{ [$style.dragging]: dragging }" />
   </div>
 </template>
 
@@ -8,7 +8,7 @@
 import type { InputLayer } from 'pcb-stackup';
 import type { IPosition, IScale } from '@/utils/graphic';
 
-import { defineProps, reactive, ref, watch } from 'vue';
+import { reactive, ref, useTemplateRef, watch } from 'vue';
 
 import { useWheelEvents } from '@/composables/useWheelEvents';
 import { useMouseEvents } from '@/composables/useMouseEvents';
@@ -24,13 +24,33 @@ const props = defineProps<{
 }>();
 
 const image = ref<HTMLImageElement>();
-watch(props, async () => {
-  const stack = await renderStack(props.layers, props.render);
-  image.value = await loadSvgImage(stack[props.render.side].svg);
-});
+let renderTaskId = 0;
+watch(
+  [
+    () => props.layers,
+    () => props.render.side,
+    () => props.render.sm,
+    () => props.render.cf,
+    () => props.render.sp,
+  ],
+  async () => {
+    const taskId = ++renderTaskId;
 
-const containerRef = ref<HTMLElement>();
-const canvasRef = ref<HTMLCanvasElement>();
+    try {
+      const stack = await renderStack(props.layers, props.render);
+      const svg = stack[props.render.side]?.svg;
+      image.value = svg ? await loadSvgImage(svg) : undefined;
+    } catch (error) {
+      if (taskId != renderTaskId) return;
+      image.value = undefined;
+      console.error('Failed to render Gerber layers.', error);
+    }
+  },
+  { immediate: true },
+);
+
+const containerRef = useTemplateRef<HTMLElement>('container');
+const canvasRef = useTemplateRef<HTMLCanvasElement>('canvas');
 
 const container = useClientSize(containerRef);
 

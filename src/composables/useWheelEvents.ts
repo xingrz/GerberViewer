@@ -2,7 +2,7 @@ import type { IPosition, IScale } from '@/utils/graphic';
 import type { Ref } from 'vue';
 import { useEventListener } from './useEventListener';
 
-export function useWheelEvents(ref: Ref<HTMLElement | undefined>, translate: IPosition & IScale): void {
+export function useWheelEvents(ref: Ref<HTMLElement | null | undefined>, translate: IPosition & IScale): void {
   useEventListener(ref, 'wheel', (evt) => {
     evt.preventDefault();
     if (evt.ctrlKey) {

@@ -6,12 +6,12 @@ export function useEventListener<K extends keyof WindowEventMap>(
 ): void;
 
 export function useEventListener<K extends keyof GlobalEventHandlersEventMap>(
-  ref: Ref<GlobalEventHandlers | undefined>,
+  ref: Ref<GlobalEventHandlers | null | undefined>,
   type: K, listener: (this: GlobalEventHandlers, ev: GlobalEventHandlersEventMap[K]) => unknown
 ): void;
 
 export function useEventListener<K extends keyof (WindowEventMap | GlobalEventHandlersEventMap)>(
-  ref: Window | Ref<GlobalEventHandlers | undefined>,
+  ref: Window | Ref<GlobalEventHandlers | null | undefined>,
   type: K, listener: (this: Window | GlobalEventHandlers, ev: (WindowEventMap | GlobalEventHandlersEventMap)[K]) => unknown
 ): void {
   const bindListener = () => {

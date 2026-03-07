@@ -3,12 +3,12 @@
     <a-button :disabled="props.layers.length == 0" @click="showLayers">打开图层设置</a-button>
   </panel-unit>
   <a-modal
-    v-model:visible="layersShown"
+    v-model:open="layersShown"
     title="图层设置"
     centered
     width="1000px">
-    <a-row type="flex" :gutter="[8, 8]">
-      <template v-for="layer in layers" :key="layer.filename!">
+    <a-row :gutter="[8, 8]">
+      <template v-for="layer in editableLayers" :key="layer.filename!">
         <a-col :xs="24" :md="14" :lg="16">
           <span :class="$style.layerName">{{ layer.filename }}</span>
         </a-col>
@@ -41,7 +41,7 @@ import type { InputLayer } from 'pcb-stackup';
 import type { SelectProps } from 'ant-design-vue';
 import type { GerberType } from 'whats-that-gerber';
 
-import { defineEmits, defineProps, ref } from 'vue';
+import { ref } from 'vue';
 import { cloneDeep } from 'lodash';
 
 import PanelUnit from '@/components/XPanelUnit.vue';
@@ -56,16 +56,16 @@ const emit = defineEmits<{
   (e: 'update:layers', layers: InputLayer[]): void;
 }>();
 
-const layers = ref<InputLayer[]>([]);
+const editableLayers = ref<InputLayer[]>([]);
 const layersShown = ref(false);
 
 function showLayers(): void {
-  layers.value = cloneDeep(props.layers);
+  editableLayers.value = cloneDeep(props.layers);
   layersShown.value = true;
 }
 
 function saveLayers(): void {
-  emit('update:layers', layers.value);
+  emit('update:layers', editableLayers.value);
   layersShown.value = false;
 }
 
@@ -74,7 +74,7 @@ function closeLayers(): void {
 }
 
 function restoreLayers(): void {
-  layers.value = layers.value.map((layer) => ({ ...layer, ...mapLayerType(layer.filename!) }));
+  editableLayers.value = editableLayers.value.map((layer) => ({ ...layer, ...mapLayerType(layer.filename!) }));
 }
 
 const gerberTypes: SelectProps['options'] = [

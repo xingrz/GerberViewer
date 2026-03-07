@@ -1,10 +1,13 @@
 import type { ISize } from '@/utils/graphic';
 import { onBeforeUnmount, onMounted, ref, watch, type Ref } from 'vue';
 
-export function useClientSize(elementRef: Ref<HTMLElement | undefined>): Ref<ISize | undefined> {
-  const getSize = (target: HTMLElement | undefined): ISize | undefined => target && {
-    width: target.clientWidth,
-    height: target.clientHeight,
+export function useClientSize(elementRef: Ref<HTMLElement | null | undefined>): Ref<ISize | undefined> {
+  const getSize = (target: HTMLElement | null | undefined): ISize | undefined => {
+    if (!target) return undefined;
+    return {
+      width: target.clientWidth,
+      height: target.clientHeight,
+    };
   };
 
   const size = ref<ISize | undefined>(getSize(elementRef.value));
