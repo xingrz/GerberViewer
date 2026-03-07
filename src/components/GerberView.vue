@@ -93,7 +93,7 @@ watch([image, container, translate], () => {
   ctx.restore();
 });
 
-watch(image, () => {
+watch(() => props.layers, () => {
   translate.scale = 0;
   translate.x = 0;
   translate.y = 0;
