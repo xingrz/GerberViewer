@@ -1,5 +1,5 @@
 <template>
-  <a-col :span="12">
+  <a-col :xs="24" :md="12">
     <a-form :label-col="labelCol" :wrapper-col="wrapperCol">
       <h4 v-if="props.title">{{ props.title }}</h4>
       <slot />
