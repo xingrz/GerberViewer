@@ -17,7 +17,7 @@ export default {
   color_white: '白色',
   color_black: '黑色',
   color_purple: '紫色',
-  render_cf: '裸铜',
+  render_cf: '铜箔',
   render_cf_tin: '喷锡',
   render_cf_gold: '沉金',
   render_sp: '焊盘',

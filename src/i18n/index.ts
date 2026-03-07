@@ -2,11 +2,15 @@ import { createI18n } from 'vue-i18n';
 import { match } from '@formatjs/intl-localematcher';
 
 import en from './en';
-import zhCN from './zh-CN';
+import ja from './ja';
+import zhHans from './zh-Hans';
+import zhHant from './zh-Hant';
 
 export const locales = [
   { value: 'en', label: 'English' },
-  { value: 'zh-CN', label: '简体中文' },
+  { value: 'zh-Hans', label: '简体中文' },
+  { value: 'zh-Hant', label: '繁體中文' },
+  { value: 'ja', label: '日本語' },
 ];
 
 const LOCALE_STORAGE_KEY = 'locale';
@@ -39,7 +43,9 @@ const i18n = createI18n({
   fallbackLocale: 'en',
   messages: {
     en,
-    'zh-CN': zhCN,
+    ja,
+    'zh-Hans': zhHans,
+    'zh-Hant': zhHant,
   },
 });
 
