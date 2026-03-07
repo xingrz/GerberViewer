@@ -1,5 +1,7 @@
 export default {
   open_gerber: '打开 Gerber 文件',
+  empty_hint: '拖放 Gerber ZIP 文件到此处，或点击打开',
+  drop_hint: '释放以打开',
   tab_options: '选项',
   tab_output: '输出',
 

@@ -1,5 +1,7 @@
 export default {
   open_gerber: 'Open Gerber File',
+  empty_hint: 'Drop a Gerber ZIP file here or click to open',
+  drop_hint: 'Drop to open',
   tab_options: 'Options',
   tab_output: 'Output',
 
