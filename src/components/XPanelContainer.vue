@@ -66,7 +66,7 @@ function handleTabChange() {
         padding: 32px;
         background: #fff;
         max-height: 50vh;
-        overflow-y: scroll;
+        overflow-y: auto;
       }
     }
 
