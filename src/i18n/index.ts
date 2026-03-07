@@ -1,4 +1,5 @@
 import { createI18n } from 'vue-i18n';
+import { match } from '@formatjs/intl-localematcher';
 
 import en from './en';
 import zhCN from './zh-CN';
@@ -10,9 +11,10 @@ export const locales = [
 
 const LOCALE_STORAGE_KEY = 'locale';
 
+const localeValues = locales.map((l) => l.value);
+
 export function detectLocale(): string {
-  const browserLang = navigator.language;
-  return browserLang.startsWith('zh') ? 'zh-CN' : 'en';
+  return match(navigator.languages, localeValues, 'en');
 }
 
 function resolveLocale(): string {

@@ -8,6 +8,7 @@
     "lint": "eslint . --ext .ts,.vue,.js,.cjs,.mjs"
   },
   "dependencies": {
+    "@formatjs/intl-localematcher": "^0.8.1",
     "ant-design-vue": "^4.2.6",
     "buffer": "^6.0.3",
     "events": "^3.3.0",
