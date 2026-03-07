@@ -1,6 +1,29 @@
 <template>
   <div ref="container" :class="$style.container">
     <canvas ref="canvas" :class="{ [$style.dragging]: dragging }" />
+
+    <div :class="$style.infoBar">
+      <a-button
+        type="link"
+        size="small"
+        :class="$style.infoLink"
+        href="https://github.com/xingrz/GerberViewer"
+        target="_blank">
+        <template #icon><github-outlined /></template>
+      </a-button>
+      <a-dropdown :trigger="['click']" placement="topLeft">
+        <a-button type="link" size="small" :class="$style.infoLink">{{ localeLabel }}</a-button>
+        <template #overlay>
+          <a-menu
+            :selected-keys="[locale]"
+            @click="({ key }: { key: string }) => locale = key">
+            <a-menu-item v-for="item in locales" :key="item.value">
+              {{ item.label }}
+            </a-menu-item>
+          </a-menu>
+        </template>
+      </a-dropdown>
+    </div>
     <div v-if="image" :class="$style.zoomBar">
       <span :class="$style.zoomLabel">{{ zoomPercent }}</span>
       <a-button size="small" ghost @click="resetView">{{ t('zoom_fit') }}</a-button>
@@ -15,6 +38,9 @@ import type { IPosition, IScale } from '@/utils/graphic';
 import { computed, reactive, ref, useTemplateRef, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { message } from 'ant-design-vue';
+import { GithubOutlined } from '@ant-design/icons-vue';
+
+import { locales } from '@/i18n';
 
 import { useWheelEvents } from '@/composables/useWheelEvents';
 import { useMouseEvents } from '@/composables/useMouseEvents';
@@ -30,7 +56,8 @@ const props = defineProps<{
   panelHeight?: number;
 }>();
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
+const localeLabel = computed(() => locales.find((l) => l.value === locale.value)?.label);
 
 const image = ref<HTMLImageElement>();
 let renderTaskId = 0;
@@ -85,7 +112,7 @@ watch([image, container, translate, () => props.panelHeight], () => {
 
   const panelOffset = props.panelHeight ?? 0;
   const visibleArea = { width: canvas.width, height: canvas.height - panelOffset };
-  const rect = scaleInside(visibleArea, image.value);
+  const rect = scaleInside(visibleArea, image.value, 32);
 
   const visibleCenter = centerOf(visibleArea);
   const canvasCenter = { x: visibleCenter.x, y: visibleCenter.y + panelOffset };
@@ -134,6 +161,28 @@ function resetView(): void {
 
 .dragging {
   cursor: move;
+}
+
+.infoBar {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+}
+
+.infoLink {
+  color: rgba(255, 255, 255, 0.6) !important;
+  font-size: 12px;
+  padding: 0 6px;
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.9) !important;
+  }
 }
 
 .zoomBar {

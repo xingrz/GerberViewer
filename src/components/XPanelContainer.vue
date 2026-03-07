@@ -55,7 +55,9 @@ function handleTabChange() {
   right: 0;
   z-index: 10;
   padding: 8px;
-  background: #283237;
+  background: rgba(40, 50, 55, 0.85);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
   transition: background 250ms;
 
   >.ant-tabs-card {
@@ -65,7 +67,7 @@ function handleTabChange() {
       >.ant-tabs-tabpane {
         padding: 32px;
         background: #fff;
-        max-height: 50vh;
+        max-height: 40vh;
         overflow-y: auto;
       }
     }
