@@ -46,4 +46,5 @@ export default {
   output_relief_desc: 'Export relief texture',
   output_relief_tip: 'Can be used as relief texture map in 3D software like Fusion 360',
   output_btn: 'Export',
+  output_error: 'Export failed',
 };

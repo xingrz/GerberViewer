@@ -46,4 +46,5 @@ export default {
   output_relief_desc: '输出浮雕材质',
   output_relief_tip: '可用于 Fusion 360 等 3D 软件用作浮雕材质贴图',
   output_btn: '输出文件',
+  output_error: '输出失败',
 };

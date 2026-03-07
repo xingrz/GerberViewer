@@ -45,6 +45,8 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { message } from 'ant-design-vue';
 import { InfoCircleOutlined } from '@ant-design/icons-vue';
 import stackup, { type InputLayer } from 'pcb-stackup';
 import { render } from 'gerber-to-svg';
@@ -60,6 +62,8 @@ const props = defineProps<{
   layers: InputLayer[];
   renderOptions: RenderOptions;
 }>();
+
+const { t } = useI18n();
 
 const format = ref<'svg' | 'png'>('svg');
 const splitLayers = ref(false);
@@ -103,6 +107,9 @@ async function output(): Promise<void> {
     }
 
     await outputZip(files, `${basename(props.gerber!.name)}-img.zip`);
+  } catch (error) {
+    console.error('Failed to export.', error);
+    message.error(t('output_error'));
   } finally {
     rendering.value = false;
   }
