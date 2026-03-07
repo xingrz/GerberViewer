@@ -1,29 +1,45 @@
 <template>
   <x-panel-container @resize="handleResize">
     <template #extra>
-      <a-row :gutter="[8]">
+      <a-row :gutter="[8]" align="middle">
         <a-col>
           <a-button type="link" href="https://github.com/xingrz/GerberViewer" target="_blank">
             Fork me on GitHub
           </a-button>
         </a-col>
         <a-col>
+          <a-dropdown :trigger="['click']">
+            <a-button ghost size="small">{{ localeLabel }}</a-button>
+            <template #overlay>
+              <a-menu
+                :selected-keys="[locale]"
+                @click="({ key }: { key: string }) => locale = key">
+                <a-menu-item
+                  v-for="item in locales"
+                  :key="item.value">
+                  {{ item.label }}
+                </a-menu-item>
+              </a-menu>
+            </template>
+          </a-dropdown>
+        </a-col>
+        <a-col>
           <a-upload
             :custom-request="loadGerber"
             :show-upload-list="false"
             accept=".zip,application/zip">
-            <a-button type="primary" :loading="loading">打开 Gerber 文件</a-button>
+            <a-button type="primary" :loading="loading">{{ $t('open_gerber') }}</a-button>
           </a-upload>
         </a-col>
       </a-row>
     </template>
-    <a-tab-pane key="options" tab="选项">
+    <a-tab-pane key="options" :tab="$t('tab_options')">
       <x-panel>
         <render-panel v-model:render="render" />
         <layers-panel v-model:layers="layers" />
       </x-panel>
     </a-tab-pane>
-    <a-tab-pane key="output" tab="输出">
+    <a-tab-pane key="output" :tab="$t('tab_output')">
       <output-panel :gerber="gerber" :layers="layers" :render-options="render" />
     </a-tab-pane>
   </x-panel-container>
@@ -32,7 +48,8 @@
 
 <script lang="ts" setup>
 import type { InputLayer } from 'pcb-stackup';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 import XPanelContainer from '@/components/XPanelContainer.vue';
 import XPanel from '@/components/XPanel.vue';
@@ -43,6 +60,10 @@ import RenderPanel from '@/panels/RenderPanel.vue';
 import OutputPanel from '@/panels/OutputPanel.vue';
 
 import { loadLayers, type RenderOptions } from '@/utils/gerber';
+import { locales } from '@/i18n';
+
+const { locale } = useI18n();
+const localeLabel = computed(() => locales.find((l) => l.value === locale.value)?.label);
 
 const gerber = ref<File>();
 

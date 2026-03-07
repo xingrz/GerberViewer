@@ -1,10 +1,10 @@
 <template>
-  <panel-unit title="图层">
-    <a-button :disabled="props.layers.length == 0" @click="showLayers">打开图层设置</a-button>
+  <panel-unit :title="$t('layers_title')">
+    <a-button :disabled="props.layers.length == 0" @click="showLayers">{{ $t('layers_open') }}</a-button>
   </panel-unit>
   <a-modal
     v-model:open="layersShown"
-    title="图层设置"
+    :title="$t('layers_modal_title')"
     centered
     width="1000px">
     <a-row :gutter="[8, 8]">
@@ -20,18 +20,18 @@
               :style="{ width: '6em' }"
               @change="guessLayerSide(layer)" />
             <a-radio-group v-if="hasSide(layer.type)" v-model:value="layer.side">
-              <a-radio-button value="top">顶层</a-radio-button>
-              <a-radio-button value="bottom">底层</a-radio-button>
-              <a-radio-button v-if="layer.type == 'copper'" value="inner">内层</a-radio-button>
+              <a-radio-button value="top">{{ $t('layers_side_top') }}</a-radio-button>
+              <a-radio-button value="bottom">{{ $t('layers_side_bottom') }}</a-radio-button>
+              <a-radio-button v-if="layer.type == 'copper'" value="inner">{{ $t('layers_side_inner') }}</a-radio-button>
             </a-radio-group>
           </a-space>
         </a-col>
       </template>
     </a-row>
     <template #footer>
-      <a-button type="default" @click="restoreLayers">恢复默认</a-button>
-      <a-button type="default" @click="closeLayers">关闭</a-button>
-      <a-button type="primary" @click="saveLayers">确定</a-button>
+      <a-button type="default" @click="restoreLayers">{{ $t('layers_restore') }}</a-button>
+      <a-button type="default" @click="closeLayers">{{ $t('layers_close') }}</a-button>
+      <a-button type="primary" @click="saveLayers">{{ $t('layers_confirm') }}</a-button>
     </template>
   </a-modal>
 </template>
@@ -41,12 +41,15 @@ import type { InputLayer } from 'pcb-stackup';
 import type { SelectProps } from 'ant-design-vue';
 import type { GerberType } from 'whats-that-gerber';
 
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { cloneDeep } from 'lodash';
 
 import PanelUnit from '@/components/XPanelUnit.vue';
 
 import { mapLayerType } from '@/utils/gerber';
+
+const { t } = useI18n();
 
 const props = defineProps<{
   layers: InputLayer[];
@@ -77,15 +80,15 @@ function restoreLayers(): void {
   editableLayers.value = editableLayers.value.map((layer) => ({ ...layer, ...mapLayerType(layer.filename!) }));
 }
 
-const gerberTypes: SelectProps['options'] = [
-  { value: 'copper', label: '线路' },
-  { value: 'soldermask', label: '阻焊' },
-  { value: 'silkscreen', label: '丝印' },
-  { value: 'solderpaste', label: '钢网' },
-  { value: 'drill', label: '钻孔' },
-  { value: 'outline', label: '轮廓' },
-  { value: null, label: '忽略' },
-];
+const gerberTypes = computed<SelectProps['options']>(() => [
+  { value: 'copper', label: t('type_copper') },
+  { value: 'soldermask', label: t('type_soldermask') },
+  { value: 'silkscreen', label: t('type_silkscreen') },
+  { value: 'solderpaste', label: t('type_solderpaste') },
+  { value: 'drill', label: t('type_drill') },
+  { value: 'outline', label: t('type_outline') },
+  { value: null, label: t('type_ignore') },
+]);
 
 function hasSide(type: GerberType | undefined): boolean {
   return !!type && ['copper', 'soldermask', 'silkscreen', 'solderpaste'].includes(type);
