@@ -17,7 +17,7 @@
             <a-select
               v-model:value="layer.type"
               :options="gerberTypes"
-              :style="{ width: '6em' }"
+              :style="{ width: '10em' }"
               @change="guessLayerSide(layer)" />
             <a-radio-group v-if="hasSide(layer.type)" v-model:value="layer.side">
               <a-radio-button value="top">{{ $t('layers_side_top') }}</a-radio-button>
