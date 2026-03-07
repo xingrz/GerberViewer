@@ -14,7 +14,7 @@ const props = defineProps<{
 
 const labelCol = {
   style: {
-    width: '60px',
+    width: '100px',
     textAlign: 'left',
   },
 };
