@@ -29,9 +29,13 @@
       </template>
     </a-row>
     <template #footer>
-      <a-button type="default" @click="restoreLayers">{{ $t('layers_restore') }}</a-button>
-      <a-button type="default" @click="closeLayers">{{ $t('layers_close') }}</a-button>
-      <a-button type="primary" @click="saveLayers">{{ $t('layers_confirm') }}</a-button>
+      <div :class="$style.footer">
+        <a-button type="dashed" @click="restoreLayers">{{ $t('layers_restore') }}</a-button>
+        <div :class="$style.footerActions">
+          <a-button type="default" @click="closeLayers">{{ $t('layers_close') }}</a-button>
+          <a-button type="primary" @click="saveLayers">{{ $t('layers_confirm') }}</a-button>
+        </div>
+      </div>
     </template>
   </a-modal>
 </template>
@@ -107,5 +111,16 @@ function guessLayerSide(layer: InputLayer): void {
 <style lang="scss" module>
 .layerName {
   font-family: monospace;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.footerActions {
+  display: flex;
+  gap: 8px;
 }
 </style>
