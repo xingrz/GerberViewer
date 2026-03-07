@@ -14,13 +14,10 @@
       <a-row :gutter="[8, 8]">
         <a-col>
           <a-select v-model:value="render.sm" :style="{ width: '10em' }">
-            <a-select-option value="green">{{ $t('color_green') }}</a-select-option>
-            <a-select-option value="red">{{ $t('color_red') }}</a-select-option>
-            <a-select-option value="yellow">{{ $t('color_yellow') }}</a-select-option>
-            <a-select-option value="blue">{{ $t('color_blue') }}</a-select-option>
-            <a-select-option value="white">{{ $t('color_white') }}</a-select-option>
-            <a-select-option value="black">{{ $t('color_black') }}</a-select-option>
-            <a-select-option value="purple">{{ $t('color_purple') }}</a-select-option>
+            <a-select-option v-for="(color, key) in COLORS" :key="key" :value="key">
+              <span :class="$style.colorSwatch" :style="{ background: color[0] }" />
+              {{ $t(`color_${key}`) }}
+            </a-select-option>
           </a-select>
         </a-col>
       </a-row>
@@ -48,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { RenderOptions } from '@/utils/gerber';
+import { COLORS, type RenderOptions } from '@/utils/gerber';
 import { reactive } from 'vue';
 
 import PanelUnit from '@/components/XPanelUnit.vue';
@@ -59,3 +56,15 @@ const props = defineProps<{
 
 const render = reactive(props.render);
 </script>
+
+<style lang="scss" module>
+.colorSwatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  vertical-align: middle;
+  margin-right: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+</style>
