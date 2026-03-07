@@ -1,6 +1,10 @@
 <template>
   <div ref="container" :class="$style.container">
     <canvas ref="canvas" :class="{ [$style.dragging]: dragging }" />
+    <div v-if="image" :class="$style.zoomBar">
+      <span :class="$style.zoomLabel">{{ zoomPercent }}</span>
+      <a-button size="small" ghost @click="resetView">{{ t('zoom_fit') }}</a-button>
+    </div>
   </div>
 </template>
 
@@ -8,7 +12,7 @@
 import type { InputLayer } from 'pcb-stackup';
 import type { IPosition, IScale } from '@/utils/graphic';
 
-import { reactive, ref, useTemplateRef, watch } from 'vue';
+import { computed, reactive, ref, useTemplateRef, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { message } from 'ant-design-vue';
 
@@ -110,6 +114,14 @@ watch(() => props.layers, () => {
 
 useWheelEvents(canvasRef, translate);
 useMouseEvents(canvasRef, translate, dragging);
+
+const zoomPercent = computed(() => Math.round(Math.pow(2, translate.scale) * 100) + '%');
+
+function resetView(): void {
+  translate.scale = 0;
+  translate.x = 0;
+  translate.y = 0;
+}
 </script>
 
 <style lang="scss" module>
@@ -122,5 +134,25 @@ useMouseEvents(canvasRef, translate, dragging);
 
 .dragging {
   cursor: move;
+}
+
+.zoomBar {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+}
+
+.zoomLabel {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  min-width: 3em;
+  text-align: center;
 }
 </style>

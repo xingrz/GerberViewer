@@ -23,6 +23,7 @@ export default {
   render_sp: '焊盘',
   render_sp_draw: '绘制锡膏',
   render_error: '渲染 Gerber 图层失败',
+  zoom_fit: '适应',
 
   layers_title: '图层',
   layers_open: '打开图层设置',

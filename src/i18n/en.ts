@@ -23,6 +23,7 @@ export default {
   render_sp: 'Pads',
   render_sp_draw: 'Draw Solder Paste',
   render_error: 'Failed to render Gerber layers',
+  zoom_fit: 'Fit',
 
   layers_title: 'Layers',
   layers_open: 'Layer Settings',
