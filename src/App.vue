@@ -43,7 +43,7 @@
       <output-panel :gerber="gerber" :layers="layers" :render-options="render" />
     </a-tab-pane>
   </x-panel-container>
-  <gerber-view :layers="layers" :render="render" :style="{ top: `${canvasTop}px` }" />
+  <gerber-view :layers="layers" :render="render" :panel-height="panelHeight" />
 </template>
 
 <script lang="ts" setup>
@@ -76,9 +76,9 @@ const render = ref<RenderOptions>({
   sp: false,
 });
 
-const canvasTop = ref(0);
+const panelHeight = ref(0);
 function handleResize(height: number): void {
-  canvasTop.value = height;
+  panelHeight.value = height;
 }
 
 const loading = ref(false);

@@ -21,6 +21,7 @@ import { renderStack, type RenderOptions } from '@/utils/gerber';
 const props = defineProps<{
   layers: InputLayer[];
   render: RenderOptions;
+  panelHeight?: number;
 }>();
 
 const image = ref<HTMLImageElement>();
@@ -61,7 +62,7 @@ const translate = reactive<IPosition & IScale>({
 
 const dragging = ref(false);
 
-watch([image, container, translate], () => {
+watch([image, container, translate, () => props.panelHeight], () => {
   const canvas = canvasRef.value;
   if (!canvas || !container.value) return;
   canvas.width = container.value.width;
@@ -73,9 +74,12 @@ watch([image, container, translate], () => {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
 
-  const rect = scaleInside(canvas, image.value);
+  const panelOffset = props.panelHeight ?? 0;
+  const visibleArea = { width: canvas.width, height: canvas.height - panelOffset };
+  const rect = scaleInside(visibleArea, image.value);
 
-  const canvasCenter = centerOf(canvas);
+  const visibleCenter = centerOf(visibleArea);
+  const canvasCenter = { x: visibleCenter.x, y: visibleCenter.y + panelOffset };
   const imageCenter = centerOf(rect);
 
   translate.scale = Math.min(5, Math.max(-2, translate.scale));
@@ -105,11 +109,10 @@ useMouseEvents(canvasRef, translate, dragging);
 
 <style lang="scss" module>
 .container {
-  position: absolute;
-  left: 8px;
-  right: 8px;
-  bottom: 8px;
+  position: fixed;
+  inset: 0;
   overflow: hidden;
+  background: #1a2327;
 }
 
 .dragging {

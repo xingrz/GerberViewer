@@ -49,6 +49,11 @@ function handleTabChange() {
 
 <style lang="scss">
 .x-panel-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
   padding: 8px;
   background: #283237;
   transition: background 250ms;
