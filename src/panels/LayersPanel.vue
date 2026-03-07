@@ -9,10 +9,10 @@
     width="1000px">
     <a-row :gutter="[8, 8]">
       <template v-for="layer in editableLayers" :key="layer.filename!">
-        <a-col :xs="24" :md="14" :lg="16">
+        <a-col :xs="24" :md="10" :lg="10">
           <span :class="$style.layerName">{{ layer.filename }}</span>
         </a-col>
-        <a-col :xs="24" :md="10" :lg="8">
+        <a-col :xs="24" :md="14" :lg="14">
           <a-space>
             <a-select
               v-model:value="layer.type"
