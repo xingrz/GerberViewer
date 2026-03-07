@@ -20,6 +20,7 @@ export default {
   render_cf_gold: 'ENIG',
   render_sp: 'Pads',
   render_sp_draw: 'Draw Solder Paste',
+  render_error: 'Failed to render Gerber layers',
 
   layers_title: 'Layers',
   layers_open: 'Layer Settings',

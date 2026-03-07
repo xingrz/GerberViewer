@@ -9,6 +9,8 @@ import type { InputLayer } from 'pcb-stackup';
 import type { IPosition, IScale } from '@/utils/graphic';
 
 import { reactive, ref, useTemplateRef, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { message } from 'ant-design-vue';
 
 import { useWheelEvents } from '@/composables/useWheelEvents';
 import { useMouseEvents } from '@/composables/useMouseEvents';
@@ -23,6 +25,8 @@ const props = defineProps<{
   render: RenderOptions;
   panelHeight?: number;
 }>();
+
+const { t } = useI18n();
 
 const image = ref<HTMLImageElement>();
 let renderTaskId = 0;
@@ -45,6 +49,7 @@ watch(
       if (taskId != renderTaskId) return;
       image.value = undefined;
       console.error('Failed to render Gerber layers.', error);
+      message.error(t('render_error'));
     }
   },
   { immediate: true },
